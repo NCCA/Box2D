@@ -13,7 +13,7 @@
 
 
 
-NGLScene::NGLScene(QWindow *_parent) : OpenGLWindow(_parent)
+NGLScene::NGLScene()
 {
   setTitle("Box2D and NGL");
 
@@ -22,22 +22,17 @@ NGLScene::NGLScene(QWindow *_parent) : OpenGLWindow(_parent)
 
 NGLScene::~NGLScene()
 {
-  ngl::NGLInit *Init = ngl::NGLInit::instance();
   std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
-  Init->NGLQuit();
   delete m_world;
 }
 
-void NGLScene::resizeEvent(QResizeEvent *_event )
+void NGLScene::resizeGL(int _w, int _h)
 {
-  if(isExposed())
-  {
-  int w=_event->size().width();
-  int h=_event->size().height();
-  // set the viewport for openGL
-  glViewport(0,0,w,h);
-  renderLater();
-  }
+  // set the viewport for openGL we need to take into account retina display
+  // etc by using the pixel ratio as a multiplyer
+  glViewport(0,0,_w,_h);
+  // now set the camera size values as the screen size has changed
+  update();
 }
 
 void NGLScene::createStaticBodies()
@@ -93,7 +88,7 @@ void NGLScene::createStaticBodies()
 }
 
 
-void NGLScene::initialize()
+void NGLScene::initializeGL()
 {
   // we must call this first before any other GL commands to load and link the
   // gl commands from the lib, if this is not done program will crash
@@ -171,7 +166,7 @@ void NGLScene::initialize()
   m_platform->CreateFixture(&fixtureDef);
   m_platform->SetLinearVelocity(b2Vec2(-10,0));
 
-  startTimer(0);
+  startTimer(10);
 
 
 }
@@ -192,7 +187,7 @@ void NGLScene::loadMatricesToShader()
 
 }
 
-void NGLScene::render()
+void NGLScene::paintGL()
 {
   // clear the screen and depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -316,7 +311,7 @@ void NGLScene::keyPressEvent(QKeyEvent *_event)
   // finally update the GLWindow and re-draw
   //if (isExposed())
 
-    renderLater();
+    update();
 }
 
 void NGLScene::keyReleaseEvent( QKeyEvent *_event	)
@@ -365,7 +360,7 @@ void NGLScene::timerEvent( QTimerEvent *_event)
     m_platform->SetLinearVelocity(dir);
   }
 
-  renderLater();
+  update();
 }
 
 
