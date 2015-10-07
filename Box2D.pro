@@ -11,6 +11,8 @@ isEqual(QT_MAJOR_VERSION, 5) {
 	cache()
 	DEFINES +=QT5BUILD
 }
+# this is the uni path for the new version of Box2D
+LIBS+=-lBox2D
 
 # where to put moc auto generated files
 MOC_DIR=moc
