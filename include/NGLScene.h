@@ -8,6 +8,7 @@
 #include <Box2D/Box2D.h>
 #include <QOpenGLWindow>
 #include <QSet>
+#include <memory>
 //----------------------------------------------------------------------------------------------------------------------
 /// @file NGLScene.h
 /// @brief this class inherits from the Qt OpenGLWindow and allows us to use NGL to draw OpenGL
@@ -45,7 +46,7 @@ class NGLScene : public QOpenGLWindow
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief this is called everytime we resize
     //----------------------------------------------------------------------------------------------------------------------
-    void resizeGL(int _w, int _h);
+    void resizeGL(QResizeEvent *_event);
 
 private:
     void createStaticBodies();
@@ -64,13 +65,23 @@ private:
     /// @brief project matrix
     //----------------------------------------------------------------------------------------------------------------------
     ngl::Mat4 m_projection;
-    /// @brief the physics world
-    b2World *m_world;
+    /// @brief the physics world can use a smart
+    /// pointer for this so we don't need to delete
+    std::unique_ptr<b2World> m_world;
     /// @brief the dynamic body
+    /// due to how Box2D works we need raw pointers for this
     b2Body *m_body;
     /// @brief moving platform
     b2Body *m_platform;
 
+    //----------------------------------------------------------------------------------------------------------------------
+     /// @brief window width
+     //----------------------------------------------------------------------------------------------------------------------
+     int m_width;
+     //----------------------------------------------------------------------------------------------------------------------
+     /// @brief window height
+     //----------------------------------------------------------------------------------------------------------------------
+     int m_height;
 
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief transformation stack for the gl transformations etc

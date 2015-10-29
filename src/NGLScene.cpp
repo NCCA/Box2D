@@ -23,16 +23,12 @@ NGLScene::NGLScene()
 NGLScene::~NGLScene()
 {
   std::cout<<"Shutting down NGL, removing VAO's and Shaders\n";
-  delete m_world;
 }
 
-void NGLScene::resizeGL(int _w, int _h)
+void NGLScene::resizeGL(QResizeEvent *_event)
 {
-  // set the viewport for openGL we need to take into account retina display
-  // etc by using the pixel ratio as a multiplyer
-  glViewport(0,0,_w,_h);
-  // now set the camera size values as the screen size has changed
-  update();
+  m_width=_event->size().width()*devicePixelRatio();
+  m_height=_event->size().height()*devicePixelRatio();
 }
 
 void NGLScene::createStaticBodies()
@@ -118,7 +114,7 @@ void NGLScene::initializeGL()
   m_view=ngl::lookAt(from,to,up);
   // box2d physic setup first gravity down in the y
   b2Vec2 gravity(0.0f, -20.0f);
-  m_world= new b2World(gravity);
+  m_world.reset(new b2World(gravity));
 
   b2BodyDef groundBodyDef;
   groundBodyDef.position.Set(0.0f, -20.0f);
@@ -132,7 +128,7 @@ void NGLScene::initializeGL()
   b2BodyDef bodyDef;
   bodyDef.type = b2_dynamicBody;
   bodyDef.position.Set(-0.1f, 0.0f);
-  m_body = m_world->CreateBody(&bodyDef);
+  m_body=m_world->CreateBody(&bodyDef);
   m_body->SetAngularVelocity(0.0);
   m_body->SetAngularDamping(0.3f);
   m_body->SetLinearDamping(0.2f);
@@ -154,7 +150,7 @@ void NGLScene::initializeGL()
   // create a moving platform
   bodyDef.type = b2_kinematicBody;
   bodyDef.position.Set(0.0,2.0);
-  m_platform = m_world->CreateBody(&bodyDef);
+  m_platform=m_world->CreateBody(&bodyDef);
   m_platform->SetFixedRotation(true);
 
   dynamicBox.SetAsBox(5.0f, 1.0f);
@@ -191,7 +187,7 @@ void NGLScene::paintGL()
 {
   // clear the screen and depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+  glViewport(0,0,m_width,m_height);
   // grab an instance of the shader manager
   ngl::ShaderLib *shader=ngl::ShaderLib::instance();
   (*shader)["nglDiffuseShader"]->use();
