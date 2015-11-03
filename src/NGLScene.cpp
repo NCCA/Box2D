@@ -31,6 +31,12 @@ void NGLScene::resizeGL(QResizeEvent *_event)
   m_height=_event->size().height()*devicePixelRatio();
 }
 
+void NGLScene::resizeGL(int _w , int _h)
+{
+  m_width=_w*devicePixelRatio();
+  m_height=_h*devicePixelRatio();
+}
+
 void NGLScene::createStaticBodies()
 {
   float x=-30.0f;
