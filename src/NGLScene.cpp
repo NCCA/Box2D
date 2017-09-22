@@ -46,11 +46,11 @@ void NGLScene::createStaticBodies()
     b.dim.set(10.0f,1.0f);
     b.pos.set(x,y);
     m_staticBodies.push_back(b);
-    x+=8.0;
-    if(x>0.0)
-      y-=3.8;
+    x+=8.0f;
+    if(x>0.0f)
+      y-=3.8f;
     else
-      y+=3.8;
+      y+=3.8f;
 
   }
 
@@ -69,11 +69,11 @@ void NGLScene::createStaticBodies()
     b.dim.set(10.0f,1.0f);
     b.pos.set(x,y);
     m_staticBodies.push_back(b);
-    x+=8.0;
-    if(x<2.0)
-      y+=3.8;
+    x+=8.0f;
+    if(x<2.0f)
+      y+=3.8f;
     else
-      y+=3.8;
+      y+=3.8f;
 
   }
 
@@ -173,9 +173,9 @@ void NGLScene::loadMatricesToShader()
 
   ngl::Mat4 MVP;
   ngl::Mat3 normalMatrix;
-  MVP= m_transform.getMatrix()*m_view*m_projection;
-  normalMatrix=m_transform.getMatrix()*m_view;
-  normalMatrix.inverse();
+  MVP= m_projection * m_view * m_transform.getMatrix();
+  normalMatrix=m_view * m_transform.getMatrix();
+  normalMatrix.inverse().transpose();
   shader->setUniform("MVP",MVP);
   shader->setUniform("normalMatrix",normalMatrix);
 
