@@ -1,11 +1,11 @@
 #ifndef NGLSCENE_H_
 #define NGLSCENE_H_
-#include <QOpenGLWindow>
-#include <QSet>
 #include <ngl/Transformation.h>
 #include <ngl/Text.h>
 #include <Box2D/Box2D.h>
 #include <memory>
+#include <QOpenGLWindow>
+#include <QSet>
 //----------------------------------------------------------------------------------------------------------------------
 /// @file NGLScene.h
 /// @brief this class inherits from the Qt OpenGLWindow and allows us to use NGL to draw OpenGL
