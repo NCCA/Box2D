@@ -19,9 +19,17 @@ find_package(NGL CONFIG REQUIRED)
 # Instruct CMake to run moc automatically when needed (Qt projects only)
 set(CMAKE_AUTOMOC ON)
 # find Qt libs
-find_package(Qt5Widgets)
+# find Qt libs first we check for Version 6
+find_package(Qt6 COMPONENTS OpenGL Widgets QUIET )
+if ( Qt6_FOUND )
+    message("Found Qt6 Using that")
+else()
+    message("Found Qt5 Using that")
+    find_package(Qt5 COMPONENTS OpenGL Widgets REQUIRED)
+endif()
+
 # find box2d 
-find_package(unofficial-box2d CONFIG REQUIRED)
+find_package(box2d CONFIG REQUIRED)
 # use C++ 17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -33,5 +41,5 @@ target_sources(${TargetName} PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp
 			${PROJECT_SOURCE_DIR}/src/NGLScene.cpp  
 			${PROJECT_SOURCE_DIR}/include/NGLScene.h  
 )
-target_link_libraries(${TargetName} PRIVATE  NGL Qt5::Widgets)
-target_link_libraries(${TargetName} PRIVATE unofficial::box2d::box2d)
+target_link_libraries(${TargetName} PRIVATE  NGL Qt::Widgets Qt::OpenGL)
+target_link_libraries(${TargetName} PRIVATE box2d::box2d)
