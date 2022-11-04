@@ -2,7 +2,7 @@
 #define NGLSCENE_H_
 #include <ngl/Transformation.h>
 #include <ngl/Text.h>
-#include <Box2D/Box2D.h>
+#include <box2D/box2d.h>
 #include <memory>
 #include <QOpenGLWindow>
 #include <QSet>
@@ -21,109 +21,105 @@
 
 class NGLScene : public QOpenGLWindow
 {
-  public:
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief ctor for our NGL drawing class
-    /// @param [in] parent the parent window to the class
-    //----------------------------------------------------------------------------------------------------------------------
-    NGLScene();
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief dtor must close down ngl and release OpenGL resources
-    //----------------------------------------------------------------------------------------------------------------------
-    ~NGLScene() override;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the initialize class is called once when the window is created and we have a valid GL context
-    /// use this to setup any default GL stuff
-    //----------------------------------------------------------------------------------------------------------------------
-    void initializeGL() override;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief this is called everytime we want to draw the scene
-    //----------------------------------------------------------------------------------------------------------------------
-    void paintGL() override;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief this is called everytime we resize
-    //----------------------------------------------------------------------------------------------------------------------
-    void resizeGL(int _w, int _h) override;
+public:
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief ctor for our NGL drawing class
+  /// @param [in] parent the parent window to the class
+  //----------------------------------------------------------------------------------------------------------------------
+  NGLScene();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief dtor must close down ngl and release OpenGL resources
+  //----------------------------------------------------------------------------------------------------------------------
+  ~NGLScene() override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief the initialize class is called once when the window is created and we have a valid GL context
+  /// use this to setup any default GL stuff
+  //----------------------------------------------------------------------------------------------------------------------
+  void initializeGL() override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief this is called everytime we want to draw the scene
+  //----------------------------------------------------------------------------------------------------------------------
+  void paintGL() override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief this is called everytime we resize
+  //----------------------------------------------------------------------------------------------------------------------
+  void resizeGL(int _w, int _h) override;
 
 private:
-    void createStaticBodies();
-    typedef struct
-    {
-      ngl::Vec2 pos;
-      ngl::Vec2 dim;
-    }staticBody;
-    std::vector <staticBody> m_staticBodies;
-    QSet<Qt::Key> m_keysPressed;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief view matrix
-    //----------------------------------------------------------------------------------------------------------------------
-    ngl::Mat4 m_view;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief project matrix
-    //----------------------------------------------------------------------------------------------------------------------
-    ngl::Mat4 m_projection;
-    /// @brief the physics world can use a smart
-    /// pointer for this so we don't need to delete
-    std::unique_ptr<b2World> m_world;
-    /// @brief the dynamic body
-    /// due to how Box2D works we need raw pointers for this
-    b2Body *m_body;
-    /// @brief moving platform
-    b2Body *m_platform;
+  void createStaticBodies();
+  typedef struct
+  {
+    ngl::Vec2 pos;
+    ngl::Vec2 dim;
+  } staticBody;
+  std::vector<staticBody> m_staticBodies;
+  QSet<Qt::Key> m_keysPressed;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief view matrix
+  //----------------------------------------------------------------------------------------------------------------------
+  ngl::Mat4 m_view;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief project matrix
+  //----------------------------------------------------------------------------------------------------------------------
+  ngl::Mat4 m_projection;
+  /// @brief the physics world can use a smart
+  /// pointer for this so we don't need to delete
+  std::unique_ptr<b2World> m_world;
+  /// @brief the dynamic body
+  /// due to how Box2D works we need raw pointers for this
+  b2Body *m_body;
+  /// @brief moving platform
+  b2Body *m_platform;
 
-    //----------------------------------------------------------------------------------------------------------------------
-     /// @brief window width
-     //----------------------------------------------------------------------------------------------------------------------
-     int m_width;
-     //----------------------------------------------------------------------------------------------------------------------
-     /// @brief window height
-     //----------------------------------------------------------------------------------------------------------------------
-     int m_height;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief window width
+  //----------------------------------------------------------------------------------------------------------------------
+  int m_width;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief window height
+  //----------------------------------------------------------------------------------------------------------------------
+  int m_height;
 
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief transformation stack for the gl transformations etc
-    //----------------------------------------------------------------------------------------------------------------------
-    ngl::Transformation m_transform;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief method to load transform matrices to the shader
-    //----------------------------------------------------------------------------------------------------------------------
-    void loadMatricesToShader();
-     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief Qt Event called when a key is pressed
-    /// @param [in] _event the Qt event to query for size etc
-    //----------------------------------------------------------------------------------------------------------------------
-    void keyPressEvent(QKeyEvent *_event) override;
-    void keyReleaseEvent( QKeyEvent *_event	) override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief transformation stack for the gl transformations etc
+  //----------------------------------------------------------------------------------------------------------------------
+  ngl::Transformation m_transform;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief method to load transform matrices to the shader
+  //----------------------------------------------------------------------------------------------------------------------
+  void loadMatricesToShader();
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief Qt Event called when a key is pressed
+  /// @param [in] _event the Qt event to query for size etc
+  //----------------------------------------------------------------------------------------------------------------------
+  void keyPressEvent(QKeyEvent *_event) override;
+  void keyReleaseEvent(QKeyEvent *_event) override;
 
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief this method is called every time a mouse is moved
-    /// @param _event the Qt Event structure
-    //----------------------------------------------------------------------------------------------------------------------
-    void mouseMoveEvent (QMouseEvent * _event ) override;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief this method is called everytime the mouse button is pressed
-    /// inherited from QObject and overridden here.
-    /// @param _event the Qt Event structure
-    //----------------------------------------------------------------------------------------------------------------------
-    void mousePressEvent ( QMouseEvent *_event) override;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief this method is called everytime the mouse button is released
-    /// inherited from QObject and overridden here.
-    /// @param _event the Qt Event structure
-    //----------------------------------------------------------------------------------------------------------------------
-    void mouseReleaseEvent ( QMouseEvent *_event ) override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief this method is called every time a mouse is moved
+  /// @param _event the Qt Event structure
+  //----------------------------------------------------------------------------------------------------------------------
+  void mouseMoveEvent(QMouseEvent *_event) override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief this method is called everytime the mouse button is pressed
+  /// inherited from QObject and overridden here.
+  /// @param _event the Qt Event structure
+  //----------------------------------------------------------------------------------------------------------------------
+  void mousePressEvent(QMouseEvent *_event) override;
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief this method is called everytime the mouse button is released
+  /// inherited from QObject and overridden here.
+  /// @param _event the Qt Event structure
+  //----------------------------------------------------------------------------------------------------------------------
+  void mouseReleaseEvent(QMouseEvent *_event) override;
 
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief this method is called everytime the mouse wheel is moved
-    /// inherited from QObject and overridden here.
-    /// @param _event the Qt Event structure
-    //----------------------------------------------------------------------------------------------------------------------
-    void wheelEvent( QWheelEvent *_event) override;
-    void timerEvent( QTimerEvent *_event) override;
-
-
+  //----------------------------------------------------------------------------------------------------------------------
+  /// @brief this method is called everytime the mouse wheel is moved
+  /// inherited from QObject and overridden here.
+  /// @param _event the Qt Event structure
+  //----------------------------------------------------------------------------------------------------------------------
+  void wheelEvent(QWheelEvent *_event) override;
+  void timerEvent(QTimerEvent *_event) override;
 };
-
-
 
 #endif
